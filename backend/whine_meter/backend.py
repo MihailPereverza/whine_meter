@@ -1,8 +1,9 @@
 import contextlib
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.params import Depends
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from whine_meter.core import EngineGlobal, database
@@ -19,10 +20,9 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/healthcheck")
-async def healthcheck():
-    return {"healthy": True}
-
-
-@app.get("/info")
-async def get_info(db: Session = Depends(database)):
-    return {"success": db.info}
+async def healthcheck(session: Session = Depends(database)):
+    try:
+        session.execute(text("SELECT 1"))
+        return {"healthy": True}
+    except Exception as e:
+        raise HTTPException(500, f"failed to connect to db: {e}") from e

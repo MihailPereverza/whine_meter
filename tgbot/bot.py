@@ -8,7 +8,7 @@ backend_url = os.getenv("BACKEND_URL")
 
 async def ask_backend():
     async with httpx.AsyncClient(base_url=backend_url) as client:
-        response = await client.get("/info")
+        response = await client.get("/healthcheck")
         print(response.content)
 
 
