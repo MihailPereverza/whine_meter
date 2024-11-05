@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - 'POSTGRES_USER=user'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_DB=whinemeter'
+    volumes:
+      - whine-meter-postgres-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_started
+    restart: always
+    environment:
+      - 'DB_URL=postgresql+psycopg://user:password@postgres/whinemeter'
+    healthcheck:
+      test: 'curl http://localhost:8080/healthcheck -f'
+      start_period: "3s"
+      retries: 1
+
+  bot:
+    build: ./tgbot
+    depends_on:
+      backend:
+        condition: service_healthy
+    # раскомментируйте, когда будете делать бота.
+    # restart: always
+    environment:
+      - 'BACKEND_URL=http://backend:8080'
+
+volumes:
+  whine-meter-postgres-data:
