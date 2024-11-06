@@ -15,7 +15,7 @@ class Base(DeclarativeBase):
 class Chat(Base):
     __tablename__ = "chats"
 
-    id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     """ID чата от телеги"""
     title: Mapped[str] = mapped_column()
     """Название чата"""

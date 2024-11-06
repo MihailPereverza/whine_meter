@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import Response
 
 from whine_meter import model
-from whine_meter.aggregation import get_users_data
+from whine_meter.aggregation import get_users_data, get_dates_data
 from whine_meter.core import EngineGlobal, database, db_session
 from whine_meter.data import Chat, User, Message, GenericChatIDParams
 from whine_meter.graph import generate_for_dates, generate_for_users
@@ -81,12 +81,14 @@ async def save_message(message: Message, pool: BackgroundTasks):
 def get_whiner_of_the_week(params: GenericChatIDParams = Depends(), session: Session = Depends(database)):
     # max(count(whine_value > 0.5))
     query = (
-        select(func.count(model.Message.whine_value > 0.5).label('whine_count'))
+        select(model.User)
+        .join(model.Message)
+        .where(model.Message.whine_value > 0.5)
         .where(model.Message.chat_id == params.chat_id)
         .where(model.Message.created_at > datetime.now() - timedelta(days=7))
-        .group_by(model.Message.user_id)
-        .join(model.User)
-        .order_by(text('whine_count DESC'))
+        .group_by(model.User.id)
+        .order_by(text('count(messages) DESC'))
+        .limit(1)
     )
 
     cursor = session.execute(query)
