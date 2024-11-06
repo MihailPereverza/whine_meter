@@ -7,6 +7,7 @@ from aiogram.types import Message as TGMessage
 
 from tgbot.entities.message import Message
 from tgbot.entities.user import User
+from tgbot.handlers.add_to_chat import save_chat
 from tgbot.repositories.backend import upsert_user, save_message
 
 all_messages_in_group_router = Router()
@@ -25,6 +26,9 @@ async def all_messages_in_group(tg_message: TGMessage):
         return
     if not tg_message.from_user.username:
         return
+
+    await save_chat(tg_message.chat)
+
     await upsert_user(
         user=User(
             id=tg_message.from_user.id,

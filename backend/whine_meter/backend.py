@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.params import Depends
 from sqlalchemy import text, select, func
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
@@ -38,21 +39,21 @@ async def healthcheck(session: Session = Depends(database)):
 
 @app.put("/chat")
 def save_chat(chat: Chat, session: Session = Depends(database)):
-    item = model.Chat(
+    item = dict(
         id=chat.id, title=chat.title, type=chat.type, created_at=chat.created_at, updated_at=chat.updated_at
     )
-    session.add(item)
-    session.commit()
+    query = insert(model.Chat).values([item]).on_conflict_do_nothing()
+    session.execute(query)
     return {"success": True}
 
 
 @app.put("/user")
 def save_user(user: User, session: Session = Depends(database)):
-    item = model.User(
+    item = dict(
         id=user.id, created_at=user.created_at, updated_at=user.updated_at, role=user.role, username=user.username
     )
-    session.add(item)
-    session.commit()
+    query = insert(model.User).values([item]).on_conflict_do_nothing()
+    session.execute(query)
     return {"success": True}
 
 
