@@ -16,24 +16,15 @@ from datetime import datetime
 # )
 
 
-
 @dataclass(slots=True, kw_only=True)
 class User:
     id: int
     """ID пользователя"""
     username: str
     """Имя пользователя"""
-    first_name: str | None
-    """Имя"""
-    last_name: str | None
-    """Фамилия"""
-    language_code: str | None
-    """Код языка"""
     created_at: datetime
     """Дата создания"""
     updated_at: datetime
     """Дата обновления"""
-    deleted_at: datetime | None
-    """Дата удаления"""
     role: str
     """Роль"""

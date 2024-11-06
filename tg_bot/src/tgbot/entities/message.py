@@ -16,9 +16,3 @@ class Message:
     """Дата создания"""
     updated_at: datetime
     """Дата обновления"""
-    deleted_at: datetime | None
-    """Дата удаления"""
-    whine_value: float
-    """Значение жалобы"""
-    old_versions: list[str]
-    """Старые версии сообщения"""

@@ -8,8 +8,6 @@ class Settings(BaseSettings):
     """ID аккаунтов админов"""
     debug_mode: bool = True
     """Режим отладки"""
-    database_url: str = 'some_url'
-    """URL базы данных"""
 
     class Config:
         env_file = ".env"  # Укажите файл .env, если он используется

@@ -5,7 +5,7 @@ from aiogram.types import Chat as TGChat
 from aiogram.types import Message
 
 from tgbot.entities.chat import Chat
-from tgbot.repositories.postgres.chat import pg_save_chat
+from tgbot.repositories.backend import save_chat
 
 add_to_chat_router = Router()
 
@@ -29,10 +29,9 @@ async def add_to_chat(message: Message):
     return await _save_chat(tg_chat=message.chat)
 
 
-
 async def _save_chat(tg_chat: TGChat) -> None:
     assert tg_chat.title
 
     now = datetime.now(tz=UTC)
     chat = Chat(id=tg_chat.id, title=tg_chat.title, type=tg_chat.type, created_at=now, updated_at=now)
-    return await pg_save_chat(chat=chat)
+    return await save_chat(chat=chat)
