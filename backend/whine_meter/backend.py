@@ -44,6 +44,7 @@ def save_chat(chat: Chat, session: Session = Depends(database)):
     )
     query = insert(model.Chat).values([item]).on_conflict_do_nothing()
     session.execute(query)
+    session.commit()
     return {"success": True}
 
 
@@ -54,6 +55,7 @@ def save_user(user: User, session: Session = Depends(database)):
     )
     query = insert(model.User).values([item]).on_conflict_do_nothing()
     session.execute(query)
+    session.commit()
     return {"success": True}
 
 
