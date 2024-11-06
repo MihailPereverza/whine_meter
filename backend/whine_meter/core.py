@@ -1,5 +1,7 @@
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
+
+from whine_meter.model import Base
 
 
 class EngineGlobal:
@@ -15,6 +17,10 @@ class EngineGlobal:
         cls.DBConnection = sessionmaker(
             autocommit=False, autoflush=False, bind=cls.engine, expire_on_commit=expire_on_commit
         )
+
+    @classmethod
+    def make_databases(cls) -> None:
+        Base.metadata.create_all(cls.engine)
 
     @classmethod
     def destroy(cls) -> None:
