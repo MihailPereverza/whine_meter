@@ -1,3 +1,5 @@
 fastapi[standard]~=0.115.0
 sqlalchemy~=2.0.0
 psycopg[binary]~=3.2.0
+# 3.7 и 3.9 не хотели вставать(
+matplotlib==3.5.0
