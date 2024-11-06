@@ -26,7 +26,7 @@ services:
       retries: 1
 
   bot:
-    build: ./tgbot
+    build: tg_bot
     depends_on:
       backend:
         condition: service_healthy
