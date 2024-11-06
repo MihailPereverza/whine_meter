@@ -10,7 +10,7 @@ from starlette.responses import Response
 
 from whine_meter import model
 from whine_meter.aggregation import get_users_data
-from whine_meter.core import EngineGlobal, database
+from whine_meter.core import EngineGlobal, database, db_session
 from whine_meter.data import Chat, User, Message, GenericChatIDParams
 from whine_meter.graph import generate_for_dates, generate_for_users
 from whine_meter.ml import calculate_whine
@@ -64,7 +64,7 @@ def compute_message_data(message: Message):
         whine_value=value, created_at=message.created_at, updated_at=message.updated_at
     )
 
-    with database() as session:
+    with db_session() as session:
         session.add(message_model)
         session.commit()
 

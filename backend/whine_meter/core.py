@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -43,3 +45,9 @@ def database(url: str | None = None) -> Session:
         yield db
     finally:
         db.close()
+
+
+@contextmanager
+# fastapi ломается, если у него есть @contextmanager
+def db_session():
+    yield from database()

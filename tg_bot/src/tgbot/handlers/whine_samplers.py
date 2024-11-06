@@ -3,9 +3,8 @@ from io import BytesIO
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, BufferedInputFile
-# , get_user_graph, get_daily_graph)
 
-from tgbot.repositories.backend import get_best_whiner
+from tgbot.repositories.backend import get_best_whiner, get_daily_graph, get_user_graph
 
 whine_sampler_router = Router()
 

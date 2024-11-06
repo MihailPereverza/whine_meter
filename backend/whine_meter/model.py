@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import inspect, ForeignKey
+from sqlalchemy import inspect, ForeignKey, BigInteger
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -15,7 +15,7 @@ class Base(DeclarativeBase):
 class Chat(Base):
     __tablename__ = "chats"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
     """ID чата от телеги"""
     title: Mapped[str] = mapped_column()
     """Название чата"""
@@ -30,7 +30,7 @@ class Chat(Base):
 class Message(Base):
     __tablename__ = "messages"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     """ID сообщения"""
     chat_id: Mapped[int] = mapped_column(ForeignKey("chats.id"))
     """ID чата"""
@@ -49,7 +49,7 @@ class Message(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     """ID пользователя"""
     username: Mapped[str] = mapped_column()
     """Имя пользователя"""

@@ -11,18 +11,22 @@ services:
       - whine-meter-postgres-data:/var/lib/postgresql/data
     ports:
       - '25432:5432'
+    healthcheck:
+      test: 'exit 0'
+      start_period: "3s"
+      retries: 1
 
   backend:
     build: ./backend
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
     restart: always
     environment:
       - 'DB_URL=postgresql+psycopg://user:password@postgres/whinemeter'
     healthcheck:
       test: 'curl http://localhost:8080/healthcheck -f'
-      start_period: "3s"
+      start_period: "2s"
       retries: 1
 
   bot:

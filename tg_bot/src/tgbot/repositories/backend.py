@@ -2,13 +2,16 @@ import os
 from contextlib import asynccontextmanager
 
 from httpx import AsyncClient
+from serpyco_rs import Serializer
 
 from tgbot.entities.chat import Chat
 from tgbot.entities.message import Message
 from tgbot.entities.user import User
-from tgbot.mappers.chat import chat_serializer
-from tgbot.mappers.message import message_serializer
-from tgbot.mappers.user import user_serializer
+
+
+user_serializer = Serializer(User)
+message_serializer = Serializer(Message)
+chat_serializer = Serializer(Chat)
 
 
 @asynccontextmanager
