@@ -30,10 +30,10 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-    # раскомментируйте, когда будете делать бота.
-    # restart: always
+    restart: always
     environment:
       - 'BACKEND_URL=http://backend:8080'
+      - 'TG_BOT_TOKEN'
 
 volumes:
   whine-meter-postgres-data:
