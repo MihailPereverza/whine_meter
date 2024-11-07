@@ -64,7 +64,7 @@ def generate_for_users(data: dict[str, float]) -> io.BytesIO:
     scatter_colors = plt.cm.RdYlGn_r(sorted_values)  # Цвета для точек (обратная цветовая карта)
 
     # Строим точки с разными цветами
-    plt.scatter(sorted_users, sorted_values, color=scatter_colors)
+    plt.bar(sorted_users, sorted_values, color=scatter_colors)
 
     plt.ylim(0, 1)  # Устанавливаем пределы по оси Y
     plt.title("Рейтинг нытиков")
