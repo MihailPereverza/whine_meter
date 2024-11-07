@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.params import Depends
-from sqlalchemy import text, select, func
+from sqlalchemy import text, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from starlette.responses import Response
@@ -59,8 +59,11 @@ def save_user(user: User, session: Session = Depends(database)):
     return {"success": True}
 
 
-def compute_message_data(message: Message):
-    value = calculate_whine(message.text)
+async def compute_message_data(message: Message):
+    value = await calculate_whine(message.text)
+    if value is None:
+        # cannot log this message :(
+        return
 
     message_model = model.Message(
         id=message.id, chat_id=message.chat_id, user_id=message.user_id,
