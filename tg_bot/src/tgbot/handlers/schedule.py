@@ -1,7 +1,7 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Router
-from aiogram.filters import Command
-from aiogram.types import Message, CommandObject
+from aiogram.filters import Command, CommandObject
+from aiogram.types import Message
 from datetime import datetime
 from whine_samplers import daily_graph
 
