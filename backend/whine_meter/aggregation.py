@@ -43,7 +43,7 @@ def user_partition(data: list[WhinerData]) -> dict[str, list[WhinerData]]:
     return messages
 
 
-def daily_partition(data: list[WhinerData]) -> list[float]:
+def daily_partition(data: list[WhinerData]) -> list[tuple[datetime, float]]:
     if not data:
         return []
 
@@ -59,19 +59,19 @@ def daily_partition(data: list[WhinerData]) -> list[float]:
         while i < len(values) and values[i].date < next_date:
             current_count += values[i].whine_count
             i += 1
-        output.append(current_count)
+        output.append((start_date, max(0, current_count)))
         start_date = next_date
 
     return output
 
 
 def daily_average(data: list[WhinerData]) -> float:
-    daily_data = daily_partition(data) or [0]
+    daily_data = [x[1] for x in daily_partition(data)] or [0.0]
     return statistics.fmean(daily_data)
 
 
 def max_whine_count(data: list[WhinerData]) -> float:
-    daily_data = [value for part in user_partition(data).values() for value in daily_partition(part)] or [0]
+    daily_data = [value[1] for part in user_partition(data).values() for value in daily_partition(part)] or [0.0]
     return max(daily_data)
 
 
@@ -90,7 +90,19 @@ def get_users_data(chat_id: int):
 
 
 def get_dates_data(chat_id: int):
-    return {datetime.now(): 0.8, datetime.now() - timedelta(days=1): 0.5}  # todo: select from db
+    whining = get_whining(chat_id, timedelta(days=21))
+    partition = daily_partition(whining)
+    maxx = max(x[1] for x in partition)
+    output = {x: y / maxx for x, y in partition}
+    # some days might have had nothing, set them to 0
+    min_day = min(output.keys())
+    max_day = max(output.keys())
+    while min_day < max_day:
+        if min_day not in output:
+            output[min_day] = 0
+        min_day += timedelta(days=1)
+
+    return output
 
 
 def whine_of_the_week(chat_id: int) -> PartialUser | None:
