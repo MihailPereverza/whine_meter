@@ -3,12 +3,12 @@ from aiogram import Router
 from aiogram.filters import Command, CommandObject
 from aiogram.types import Message
 from datetime import datetime
-from whine_samplers import daily_graph
+from tgbot.handlers.whine_samplers import daily_graph
 
 
 scheduler_router = Router()
 
-@scheduler_router.message(Command("set_date_time"))
+@scheduler_router.message(Command(commands=["set_date_time"]))
 async def cmd_set_date_time(message: Message, command: CommandObject):
     data = command.args
     if data is None:

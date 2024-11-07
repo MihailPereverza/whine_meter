@@ -42,8 +42,8 @@ class BotService:
         self.db.include_router(start_router)
         self.db.include_router(add_to_chat_router)
         self.db.include_router(whine_sampler_router)
-        self.db.include_router(all_messages_in_group_router)
         self.db.include_router(scheduler_router)
+        self.db.include_router(all_messages_in_group_router)
 
     @property
     def aiogram_bot(self) -> Bot:
