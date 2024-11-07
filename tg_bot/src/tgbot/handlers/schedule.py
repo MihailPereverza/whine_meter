@@ -1,12 +1,8 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message, CommandObject
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
-from tg_bot import apsched
 from whine_samplers import daily_graph
 
 
