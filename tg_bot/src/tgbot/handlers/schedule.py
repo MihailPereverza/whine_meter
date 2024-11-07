@@ -11,6 +11,9 @@ scheduler_router = Router()
 @scheduler_router.message(Command("set_date_time"))
 async def cmd_set_date_time(message: Message, command: CommandObject):
     data = command.args
+    if data is None:
+        await message.answer("Неверный формат")
+        return
     if len(data) == 1:
         await message.answer("Неверный формат")
         return
