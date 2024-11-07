@@ -1,5 +1,4 @@
 import dataclasses
-import logging
 import statistics
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -18,10 +17,10 @@ class WhinerData:
     whine_value: float
     date: datetime
 
-    whine_count: int = dataclasses.field(init=False)
+    whine_count: float = dataclasses.field(init=False)
 
     def __post_init__(self):
-        self.whine_count = (self.whine_value >= 0.25) + (self.whine_value >= 0.5)
+        self.whine_count = (self.whine_value >= 0.25) + (self.whine_value >= 0.5) - 0.2 * (self.whine_value < 0.01)
 
 
 def get_whining(chat_id: int, interval: timedelta = timedelta(days=7)) -> list[WhinerData]:
