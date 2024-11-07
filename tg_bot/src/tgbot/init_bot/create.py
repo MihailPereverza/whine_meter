@@ -10,6 +10,7 @@ from aiogram.types import TelegramObject
 
 from tgbot.handlers.add_to_chat import add_to_chat_router
 from tgbot.handlers.all_message_in_group import all_messages_in_group_router
+from tgbot.handlers.kick_best_whiner import kick_best_whiner_router
 from tgbot.handlers.start import start_router
 from tgbot.handlers.whine_samplers import whine_sampler_router
 from tgbot.repositories.backend import check_backend
@@ -39,6 +40,7 @@ class BotService:
 
     def _register_handlers(self):
         self.db.include_router(start_router)
+        self.db.include_router(kick_best_whiner_router)
         self.db.include_router(add_to_chat_router)
         self.db.include_router(whine_sampler_router)
         self.db.include_router(all_messages_in_group_router)

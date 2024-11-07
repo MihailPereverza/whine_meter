@@ -1,8 +1,7 @@
-from io import BytesIO
 
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message, BufferedInputFile
+from aiogram.types import BufferedInputFile, Message
 
 from tgbot.repositories.backend import get_best_whiner, get_daily_graph, get_user_graph
 

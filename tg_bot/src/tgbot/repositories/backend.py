@@ -1,4 +1,5 @@
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from httpx import AsyncClient
@@ -8,15 +9,16 @@ from tgbot.entities.chat import Chat
 from tgbot.entities.message import Message
 from tgbot.entities.user import User
 
-
 user_serializer = Serializer(User)
 message_serializer = Serializer(Message)
 chat_serializer = Serializer(Chat)
 
 
 @asynccontextmanager
-async def backend_connection() -> AsyncClient:
-    async with AsyncClient(base_url=os.getenv("BACKEND_URL")) as sess:
+async def backend_connection() -> AsyncIterator[AsyncClient]:
+    backend_url = os.getenv("BACKEND_URL")
+    assert backend_url is not None, "BACKEND_URL environment variable is not set"
+    async with AsyncClient(base_url=backend_url) as sess:
         yield sess
 
 
@@ -49,7 +51,7 @@ async def save_message(message: Message):
         await connection.put("/message", json=values)
 
 
-async def get_best_whiner(chat_id: int) -> User:
+async def get_best_whiner(chat_id: int) -> User | None:
     async with backend_connection() as connection:
         data = (await connection.get("/whiner_otw", params={"chat_id": chat_id})).json()
         return User(**data) if data else None

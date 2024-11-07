@@ -8,7 +8,7 @@ from aiogram.types import Message as TGMessage
 from tgbot.entities.message import Message
 from tgbot.entities.user import User
 from tgbot.handlers.add_to_chat import save_chat
-from tgbot.repositories.backend import upsert_user, save_message
+from tgbot.repositories.backend import save_message, upsert_user
 
 all_messages_in_group_router = Router()
 
