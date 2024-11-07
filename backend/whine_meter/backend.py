@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from starlette.responses import Response
 
 from whine_meter import model
-from whine_meter.aggregation import get_users_data, get_dates_data
+from whine_meter.aggregation import get_users_data, get_dates_data, whine_of_the_week
 from whine_meter.core import EngineGlobal, database, db_session
 from whine_meter.data import Chat, User, Message, GenericChatIDParams
 from whine_meter.graph import generate_for_dates, generate_for_users
@@ -83,24 +83,8 @@ async def save_message(message: Message, pool: BackgroundTasks):
 
 
 @app.get("/whiner_otw")
-def get_whiner_of_the_week(params: GenericChatIDParams = Depends(), session: Session = Depends(database)):
-    # max(count(whine_value > 0.5))
-    query = (
-        select(model.User)
-        .join(model.Message)
-        .where(model.Message.whine_value > 0.5)
-        .where(model.Message.chat_id == params.chat_id)
-        .where(model.Message.created_at > datetime.now() - timedelta(days=7))
-        .group_by(model.User.id)
-        .order_by(text('count(messages) DESC'))
-        .limit(1)
-    )
-
-    cursor = session.execute(query)
-    item = cursor.scalar()
-    if item is None:
-        return None
-    return User.from_model(item)
+def get_whiner_of_the_week(params: GenericChatIDParams = Depends()):
+    return whine_of_the_week(params.chat_id)
 
 
 @app.get("/graph/dates")
@@ -113,7 +97,7 @@ def graph_dates(params: GenericChatIDParams = Depends()):
 
 @app.get("/graph/users")
 def graph_users(params: GenericChatIDParams = Depends()):
-    graph_data = get_users_data(params.chat_id)
+    graph_data = get_users_data(params.chat_id)[1]
     graph = generate_for_users(graph_data)
     graph.seek(0)
     return Response(graph.getvalue(), headers={"Content-Type": "image/png"})

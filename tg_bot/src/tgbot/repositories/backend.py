@@ -7,7 +7,7 @@ from serpyco_rs import Serializer
 
 from tgbot.entities.chat import Chat
 from tgbot.entities.message import Message
-from tgbot.entities.user import User
+from tgbot.entities.user import User, PartialUser
 
 user_serializer = Serializer(User)
 message_serializer = Serializer(Message)
@@ -51,10 +51,10 @@ async def save_message(message: Message):
         await connection.put("/message", json=values)
 
 
-async def get_best_whiner(chat_id: int) -> User | None:
+async def get_best_whiner(chat_id: int) -> PartialUser | None:
     async with backend_connection() as connection:
         data = (await connection.get("/whiner_otw", params={"chat_id": chat_id})).json()
-        return User(**data) if data else None
+        return PartialUser(**data) if data else None
 
 
 async def get_daily_graph(chat_id: int) -> bytes:

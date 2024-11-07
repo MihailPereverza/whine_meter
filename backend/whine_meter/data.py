@@ -52,5 +52,10 @@ class User(BaseModel):
         )
 
 
+class PartialUser(BaseModel):
+    id: int
+    username: str
+
+
 class GenericChatIDParams(BaseModel):
     chat_id: int

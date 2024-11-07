@@ -28,3 +28,11 @@ class User:
     """Дата обновления"""
     role: str
     """Роль"""
+
+
+@dataclass(slots=True, kw_only=True)
+class PartialUser:
+    id: int
+    """ID пользователя"""
+    username: str
+    """Имя пользователя"""
