@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import inspect, ForeignKey, BigInteger
+from sqlalchemy import inspect, ForeignKey, BigInteger, PrimaryKeyConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -30,7 +30,7 @@ class Chat(Base):
 class Message(Base):
     __tablename__ = "messages"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger)
     """ID сообщения"""
     chat_id: Mapped[int] = mapped_column(ForeignKey("chats.id"))
     """ID чата"""
@@ -44,6 +44,10 @@ class Message(Base):
     """Дата обновления"""
 
     author: Mapped["User"] = relationship()
+
+    __table_args__ = (
+        PrimaryKeyConstraint("id", "chat_id"),
+    )
 
 
 class User(Base):
