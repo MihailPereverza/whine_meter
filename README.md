@@ -1,6 +1,7 @@
 # Whine meter
 
 Нытьеметр позволяет находить нытиков в telegram чатах с помощью NLP-модели и прожаривать их. Также умеет рисовать графики по дням недели, по участникам чата и пр.
+Ссылка на презентацию https://docs.google.com/presentation/d/1HrLE4Z6Mz4iyOCSAAcU-mm7oN-BnOqglS7hdHt994Gk/edit?usp=sharing
 
 ## Dev setup
 
