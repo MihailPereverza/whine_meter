@@ -20,10 +20,10 @@ class WhinerData:
     whine_count: float = dataclasses.field(init=False)
 
     def __post_init__(self):
-        self.whine_count = (self.whine_value >= 0.25) + (self.whine_value >= 0.5) - 0.2 * (self.whine_value < 0.01)
+        self.whine_count = (self.whine_value >= 0.25) + (self.whine_value >= 0.5) - 0.6 * (self.whine_value < 0.01)
 
 
-def get_whining(chat_id: int, interval: timedelta = timedelta(days=7)) -> list[WhinerData]:
+def get_whining(chat_id: int, interval: timedelta = timedelta(days=1)) -> list[WhinerData]:
     query = (
         select(model.User.username, model.User.id, model.Message.whine_value, model.Message.created_at)
         .join(model.User)
@@ -43,18 +43,18 @@ def user_partition(data: list[WhinerData]) -> dict[str, list[WhinerData]]:
     return messages
 
 
-def daily_partition(data: list[WhinerData]) -> list[tuple[datetime, float]]:
+def daily_partition(data: list[WhinerData], blocksize: timedelta = timedelta(hours=1)) -> list[tuple[datetime, float]]:
     if not data:
         return []
 
     values = sorted(data, key=lambda s: s.date)
     # day: 06:00 morning - 06:00 next morning
-    start_date = values[0].date.replace(hour=6, minute=0, second=0)
+    start_date = values[0].date  # .replace(hour=6, minute=0, second=0)
     end_date = values[-1].date
     i = 0
     output = []
     while start_date < end_date:
-        next_date = start_date + timedelta(days=1)
+        next_date = start_date + blocksize
         current_count = 0
         while i < len(values) and values[i].date < next_date:
             current_count += values[i].whine_count
@@ -78,7 +78,7 @@ def max_whine_count(data: list[WhinerData]) -> float:
 def get_users_data(chat_id: int):
     whining = get_whining(chat_id)
     if not whining:
-        return {}
+        return [], {}
 
     output = {}
     mwc = max_whine_count(whining)

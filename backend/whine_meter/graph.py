@@ -28,11 +28,12 @@ def generate_for_dates(data: dict[datetime, float]) -> io.BytesIO:
 
     ax = plt.gca()  # Получаем текущую ось
     ax.xaxis.set_major_locator(mdates.AutoDateLocator())  # Автоустановка локатора для дат
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%m.%Y' if len(sorted_dates) > 10 else '%d.%m'))  # Форматирование дат
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    #  if len(sorted_dates) > 10 else '%d.%m'))  # Форматирование дат
 
     plt.ylim(0, 1.1)  # Устанавливаем пределы по оси Y
     plt.title("Как менялся уровень нытья")
-    plt.xlabel("Дата")
+    plt.xlabel("Время")
     plt.ylabel("Уровень нытья")
     plt.legend()
 
